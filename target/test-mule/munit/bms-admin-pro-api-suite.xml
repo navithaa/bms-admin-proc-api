@@ -1,0 +1,489 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="bms-admin-pro-api-suite.xml" />
+	<munit:test name="put:\organizer\(organizer-id):application\json:bms-admin-pro-api-config-test" doc:id="977a1656-1bcd-494b-ae61-3ac17b894577" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Flow Reference" doc:id="34dfa598-97ae-4117-9377-8df677bf848f" processor="flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="2fc8ea78-5a2c-41c4-ae8c-ca62c8860b6c" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://putorganizerorganizeridapplicationjsonbmsadminproapiconfigtest\mock_payload.dwl')]" mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:attributes value="#[readUrl('classpath://putorganizerorganizeridapplicationjsonbmsadminproapiconfigtest\mock_attributes.dwl')]" />
+					<munit-tools:variables >
+						<munit-tools:variable key="outboundHeaders" value="#[readUrl('classpath://putorganizerorganizeridapplicationjsonbmsadminproapiconfigtest\mock_variable_.dwl')]" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="c2b4b3b6-a74e-43d6-be87-58dad8a00ad6" >
+				<munit:payload value="#[output application/json --- readUrl('classpath://putorganizerorganizeridapplicationjsonbmsadminproapiconfigtest\set-event_payload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				<munit:attributes value="#[readUrl('classpath://putorganizerorganizeridapplicationjsonbmsadminproapiconfigtest\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://putorganizerorganizeridapplicationjsonbmsadminproapiconfigtest\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to put:\organizer\(organizer-id):application\json:bms-admin-pro-api-config" doc:id="d4efe930-a6fa-47e9-a957-6122a6e1973e" name="put:\organizer\(organizer-id):application\json:bms-admin-pro-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="5802394b-c40b-491a-adde-b60fc305286c" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import putorganizerorganizeridapplicationjsonbmsadminproapiconfigtest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="put:\show\(show-id):application\json:bms-admin-pro-api-config-test" doc:id="abd133bd-79cf-4d7e-9d9d-24d35276588d" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Flow Reference" doc:id="2c6e6b8e-ff4f-479f-acb9-1dd20de57350" processor="flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="eae82749-5ea8-49a4-89b7-9364a9c0f97e" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://putshowshowidapplicationjsonbmsadminproapiconfigtest\mock_payload.dwl')]" mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:attributes value="#[readUrl('classpath://putshowshowidapplicationjsonbmsadminproapiconfigtest\mock_attributes.dwl')]" />
+					<munit-tools:variables >
+						<munit-tools:variable key="outboundHeaders" value="#[readUrl('classpath://putshowshowidapplicationjsonbmsadminproapiconfigtest\mock_variable_.dwl')]" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="583dd2de-3630-4764-8aa8-3a49e284f9b2" >
+				<munit:payload value="#[output application/json --- readUrl('classpath://putshowshowidapplicationjsonbmsadminproapiconfigtest\set-event_payload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				<munit:attributes value="#[readUrl('classpath://putshowshowidapplicationjsonbmsadminproapiconfigtest\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://putshowshowidapplicationjsonbmsadminproapiconfigtest\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to put:\show\(show-id):application\json:bms-admin-pro-api-config" doc:id="bde7ea11-b59a-4ef9-98b1-6c41e21a4688" name="put:\show\(show-id):application\json:bms-admin-pro-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="69da2760-ea9c-4f51-aafb-29d16e7f5375" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import putshowshowidapplicationjsonbmsadminproapiconfigtest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="delete:\organizer\(organizer-id):bms-admin-pro-api-config-test" doc:id="404e4f28-ed1f-460e-9195-ec744e17eacb" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Flow Reference" doc:id="37eadd58-29a8-44dd-b784-f1a13a705ebf" processor="flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="39528631-7137-4c40-883c-995387fe7e2d" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://deleteorganizerorganizeridbmsadminproapiconfigtest\mock_payload.dwl')]" mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:attributes value="#[readUrl('classpath://deleteorganizerorganizeridbmsadminproapiconfigtest\mock_attributes.dwl')]" />
+					<munit-tools:variables >
+						<munit-tools:variable key="outboundHeaders" value="#[readUrl('classpath://deleteorganizerorganizeridbmsadminproapiconfigtest\mock_variable_.dwl')]" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="dc3bf44f-1dc3-4ecc-b361-3841792bc088" >
+				<munit:payload value="#[readUrl('classpath://deleteorganizerorganizeridbmsadminproapiconfigtest\set-event_payload.dwl')]" encoding="UTF-8" />
+				<munit:attributes value="#[readUrl('classpath://deleteorganizerorganizeridbmsadminproapiconfigtest\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://deleteorganizerorganizeridbmsadminproapiconfigtest\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to delete:\organizer\(organizer-id):bms-admin-pro-api-config" doc:id="acafa6d7-18e1-4396-83e3-103a7f3fd649" name="delete:\organizer\(organizer-id):bms-admin-pro-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="5427f683-3713-4ae3-8e13-9ec47cbb92ba" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import deleteorganizerorganizeridbmsadminproapiconfigtest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="delete:\show\(show-id):bms-admin-pro-api-config-test" doc:id="4588b993-dfc3-4804-bdb6-5b8c5e42bc86" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Flow Reference" doc:id="2a561012-5e76-4562-a07d-f1efb2478c71" processor="flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="3179af85-9912-4e41-b575-015b65b1cb5d" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://deleteshowshowidbmsadminproapiconfigtest\mock_payload.dwl')]" mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:attributes value="#[readUrl('classpath://deleteshowshowidbmsadminproapiconfigtest\mock_attributes.dwl')]" />
+					<munit-tools:variables >
+						<munit-tools:variable key="outboundHeaders" value="#[readUrl('classpath://deleteshowshowidbmsadminproapiconfigtest\mock_variable_.dwl')]" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="734070c3-5874-4fb3-877a-79331a51bfe7" >
+				<munit:payload value="#[readUrl('classpath://deleteshowshowidbmsadminproapiconfigtest\set-event_payload.dwl')]" encoding="UTF-8" />
+				<munit:attributes value="#[readUrl('classpath://deleteshowshowidbmsadminproapiconfigtest\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://deleteshowshowidbmsadminproapiconfigtest\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to delete:\show\(show-id):bms-admin-pro-api-config" doc:id="1acab10b-e0bb-4356-a565-31ac54753117" name="delete:\show\(show-id):bms-admin-pro-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="fab5e30c-6057-4a4c-8870-8ff6f0454514" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import deleteshowshowidbmsadminproapiconfigtest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="put:\user\(user-id):application\json:bms-admin-pro-api-config-test" doc:id="bfcf7dd2-ab09-4be1-b12f-3aebcb43da6f" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Flow Reference" doc:id="0715a52e-5d4a-46a6-ad6e-d993f202b6e9" processor="flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="65b788a1-fcfb-4605-923a-7f3ee9f472cd" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://putuseruseridapplicationjsonbmsadminproapiconfigtest\mock_payload.dwl')]" mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:attributes value="#[readUrl('classpath://putuseruseridapplicationjsonbmsadminproapiconfigtest\mock_attributes.dwl')]" />
+					<munit-tools:variables >
+						<munit-tools:variable key="outboundHeaders" value="#[readUrl('classpath://putuseruseridapplicationjsonbmsadminproapiconfigtest\mock_variable_.dwl')]" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="30351ae2-956e-4e63-8f57-ff51f3aedb7c" >
+				<munit:payload value="#[output application/json --- readUrl('classpath://putuseruseridapplicationjsonbmsadminproapiconfigtest\set-event_payload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				<munit:attributes value="#[readUrl('classpath://putuseruseridapplicationjsonbmsadminproapiconfigtest\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://putuseruseridapplicationjsonbmsadminproapiconfigtest\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to put:\user\(user-id):application\json:bms-admin-pro-api-config" doc:id="a4a8774e-40ed-45aa-a281-978a4436dcab" name="put:\user\(user-id):application\json:bms-admin-pro-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="f18386d0-496c-4962-b6d9-0b2bd6338e71" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import putuseruseridapplicationjsonbmsadminproapiconfigtest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="post:\advertise\send-users-phone:application\json:bms-admin-pro-api-config-test" doc:id="fb793e1a-6b99-4050-ad53-74adbccb2b82" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Flow Reference" doc:id="dfd6e417-f878-40ff-b7d7-2e2997e9cdcc" processor="flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="0df52f2b-f6fc-45b6-ae4f-fcbff0d4f632" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://postadvertisesendusersphoneapplicationjsonbmsadminproapiconfigtest\mock_payload.dwl')]" mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:attributes value="#[readUrl('classpath://postadvertisesendusersphoneapplicationjsonbmsadminproapiconfigtest\mock_attributes.dwl')]" />
+					<munit-tools:variables >
+						<munit-tools:variable key="outboundHeaders" value="#[readUrl('classpath://postadvertisesendusersphoneapplicationjsonbmsadminproapiconfigtest\mock_variable_.dwl')]" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="f670d11e-a152-4535-9d97-f3923527c353" >
+				<munit:payload value="#[output application/json --- readUrl('classpath://postadvertisesendusersphoneapplicationjsonbmsadminproapiconfigtest\set-event_payload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				<munit:attributes value="#[readUrl('classpath://postadvertisesendusersphoneapplicationjsonbmsadminproapiconfigtest\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://postadvertisesendusersphoneapplicationjsonbmsadminproapiconfigtest\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to post:\advertise\send-users-phone:application\json:bms-admin-pro-api-config" doc:id="89eecf45-502e-4bda-9035-bc8cac34ffba" name="post:\advertise\send-users-phone:application\json:bms-admin-pro-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="a683b73c-ebb8-4eda-b469-a9fff74985b0" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import postadvertisesendusersphoneapplicationjsonbmsadminproapiconfigtest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="post:\advertise\send-organizers-phone:application\json:bms-admin-pro-api-config-test" doc:id="66e9af21-80ba-4ac8-a3f4-170de52dbd00" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Flow Reference" doc:id="a109852a-d3f3-436a-94d1-267f11ce9b66" processor="flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="f528b617-25ce-4181-9dff-4e8220bf91ce" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://postadvertisesendorganizersphoneapplicationjsonbmsadminproapiconfigtest\mock_payload.dwl')]" mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:attributes value="#[readUrl('classpath://postadvertisesendorganizersphoneapplicationjsonbmsadminproapiconfigtest\mock_attributes.dwl')]" />
+					<munit-tools:variables >
+						<munit-tools:variable key="outboundHeaders" value="#[readUrl('classpath://postadvertisesendorganizersphoneapplicationjsonbmsadminproapiconfigtest\mock_variable_.dwl')]" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="c5aa2d60-aec2-47dd-b16d-ec4c4ff4676f" >
+				<munit:payload value="#[output application/json --- readUrl('classpath://postadvertisesendorganizersphoneapplicationjsonbmsadminproapiconfigtest\set-event_payload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				<munit:attributes value="#[readUrl('classpath://postadvertisesendorganizersphoneapplicationjsonbmsadminproapiconfigtest\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://postadvertisesendorganizersphoneapplicationjsonbmsadminproapiconfigtest\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to post:\advertise\send-organizers-phone:application\json:bms-admin-pro-api-config" doc:id="6d990f3e-bf30-40f3-b684-63493bb6dfee" name="post:\advertise\send-organizers-phone:application\json:bms-admin-pro-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="bd7aecb6-cf8c-4e03-87e2-4525ba64c77f" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import postadvertisesendorganizersphoneapplicationjsonbmsadminproapiconfigtest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="get:\user\(user-id):bms-admin-pro-api-config-test" doc:id="694c46ac-057a-4dd9-ad1f-e9997b3bddf8" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Flow Reference" doc:id="20f9025a-090f-4a3d-87a0-06af1b27b387" processor="flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="b337ca4a-4447-4faa-862f-1dc64b3c4882" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://getuseruseridbmsadminproapiconfigtest\mock_payload.dwl')]" mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:attributes value="#[readUrl('classpath://getuseruseridbmsadminproapiconfigtest\mock_attributes.dwl')]" />
+					<munit-tools:variables >
+						<munit-tools:variable key="outboundHeaders" value="#[readUrl('classpath://getuseruseridbmsadminproapiconfigtest\mock_variable_.dwl')]" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="2a48bb83-a2dc-4a43-b4b5-97a4376a3c9b" >
+				<munit:payload value="#[readUrl('classpath://getuseruseridbmsadminproapiconfigtest\set-event_payload.dwl')]" encoding="UTF-8" />
+				<munit:attributes value="#[readUrl('classpath://getuseruseridbmsadminproapiconfigtest\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://getuseruseridbmsadminproapiconfigtest\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to get:\user\(user-id):bms-admin-pro-api-config" doc:id="e5bba6b9-e3df-4593-83f5-b102f0b7a9ae" name="get:\user\(user-id):bms-admin-pro-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="f6d8b0bc-1fa8-4350-b013-af8d1aed2704" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import getuseruseridbmsadminproapiconfigtest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="get:\show\(show-id):bms-admin-pro-api-config-test" doc:id="23e0e7a2-6f29-41df-9697-cba09c9fab60" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Flow Reference" doc:id="38d3675c-0866-457e-8e8c-17232e5317df" processor="flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="93a0fd7c-a532-45bf-a31b-7578b972c13e" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://getshowshowidbmsadminproapiconfigtest\mock_payload.dwl')]" mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:attributes value="#[readUrl('classpath://getshowshowidbmsadminproapiconfigtest\mock_attributes.dwl')]" />
+					<munit-tools:variables >
+						<munit-tools:variable key="outboundHeaders" value="#[readUrl('classpath://getshowshowidbmsadminproapiconfigtest\mock_variable_.dwl')]" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="13573db5-b005-4a87-a1f4-88b13ec306a7" >
+				<munit:payload value="#[readUrl('classpath://getshowshowidbmsadminproapiconfigtest\set-event_payload.dwl')]" encoding="UTF-8" />
+				<munit:attributes value="#[readUrl('classpath://getshowshowidbmsadminproapiconfigtest\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://getshowshowidbmsadminproapiconfigtest\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to get:\show\(show-id):bms-admin-pro-api-config" doc:id="9ddcf4c0-6f58-4b1b-beed-32d6d427d2a8" name="get:\show\(show-id):bms-admin-pro-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="767afa9d-4f59-46e4-af17-0bc9328e1c64" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import getshowshowidbmsadminproapiconfigtest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="get:\organizer\(organizer-id):bms-admin-pro-api-config-test" doc:id="606ca0e7-9486-40ee-8b0a-938b5a35cf14" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Flow Reference" doc:id="03a02480-9002-4642-adcd-1e1108ce371d" processor="flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="99bf8f22-6cd1-46ec-b04c-7587610c7bb5" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://getorganizerorganizeridbmsadminproapiconfigtest\mock_payload.dwl')]" mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:attributes value="#[readUrl('classpath://getorganizerorganizeridbmsadminproapiconfigtest\mock_attributes.dwl')]" />
+					<munit-tools:variables >
+						<munit-tools:variable key="outboundHeaders" value="#[readUrl('classpath://getorganizerorganizeridbmsadminproapiconfigtest\mock_variable_.dwl')]" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="265aed36-e378-4d80-b4db-a95adc411883" >
+				<munit:payload value="#[readUrl('classpath://getorganizerorganizeridbmsadminproapiconfigtest\set-event_payload.dwl')]" encoding="UTF-8" />
+				<munit:attributes value="#[readUrl('classpath://getorganizerorganizeridbmsadminproapiconfigtest\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://getorganizerorganizeridbmsadminproapiconfigtest\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to get:\organizer\(organizer-id):bms-admin-pro-api-config" doc:id="dbaadd62-f754-4fed-83ea-8bd43b41f726" name="get:\organizer\(organizer-id):bms-admin-pro-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="e241fc69-f443-4018-96a1-a723a8579c49" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import getorganizerorganizeridbmsadminproapiconfigtest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="get:\user:bms-admin-pro-api-config-test" doc:id="772222cd-a080-47c4-bd78-2242226abeb9" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Flow Reference" doc:id="4b61035d-bcf8-4da3-b205-4b74c7614b21" processor="flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="0c3031cf-69c2-4d59-acd3-b7725750d02b" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://getuserbmsadminproapiconfigtest\mock_payload.dwl')]" mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:attributes value="#[readUrl('classpath://getuserbmsadminproapiconfigtest\mock_attributes.dwl')]" />
+					<munit-tools:variables >
+						<munit-tools:variable key="outboundHeaders" value="#[readUrl('classpath://getuserbmsadminproapiconfigtest\mock_variable_.dwl')]" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="9ae48973-edad-44e8-9cbb-e9fa13fc969d" >
+				<munit:payload value="#[readUrl('classpath://getuserbmsadminproapiconfigtest\set-event_payload.dwl')]" encoding="UTF-8" />
+				<munit:attributes value="#[readUrl('classpath://getuserbmsadminproapiconfigtest\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://getuserbmsadminproapiconfigtest\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to get:\user:bms-admin-pro-api-config" doc:id="676aab26-be3c-4469-b91d-f6bb70624143" name="get:\user:bms-admin-pro-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="1092d395-5b3f-43a8-9331-4ff936b69ec9" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import getuserbmsadminproapiconfigtest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="get:\show:bms-admin-pro-api-config-test" doc:id="6bcf9ef0-2af2-4a1f-b553-9b95daffec97" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Flow Reference" doc:id="8ce0551e-4608-421c-a6f8-7705678acff6" processor="flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="4ec73f1d-cf31-49bd-833a-82fdf3eff4ed" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://getshowbmsadminproapiconfigtest\mock_payload.dwl')]" mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:attributes value="#[readUrl('classpath://getshowbmsadminproapiconfigtest\mock_attributes.dwl')]" />
+					<munit-tools:variables >
+						<munit-tools:variable key="outboundHeaders" value="#[readUrl('classpath://getshowbmsadminproapiconfigtest\mock_variable_.dwl')]" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="76cfef0e-ef1c-4ae4-8748-c7978f685f5b" >
+				<munit:payload value="#[readUrl('classpath://getshowbmsadminproapiconfigtest\set-event_payload.dwl')]" encoding="UTF-8" />
+				<munit:attributes value="#[readUrl('classpath://getshowbmsadminproapiconfigtest\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://getshowbmsadminproapiconfigtest\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to get:\show:bms-admin-pro-api-config" doc:id="48ce50e2-62df-41e7-9aa2-ddc95d73c80e" name="get:\show:bms-admin-pro-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="f4560add-3ce1-42f9-a99f-078f40e4a557" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import getshowbmsadminproapiconfigtest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="get:\report:bms-admin-pro-api-config-test" doc:id="ffed1986-adbe-429a-a580-ccd6b0a64082" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Flow Reference" doc:id="9d332c77-f907-4449-a28a-6a542ca14818" processor="flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="88b2315c-1983-4344-95c8-21377b8cc690" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/csv --- readUrl('classpath://getreportbmsadminproapiconfigtest\mock_payload.dwl')]" mediaType="application/csv" encoding="UTF-8" />
+					<munit-tools:attributes value="#[readUrl('classpath://getreportbmsadminproapiconfigtest\mock_attributes.dwl')]" />
+					<munit-tools:variables >
+						<munit-tools:variable key="outboundHeaders" value="#[readUrl('classpath://getreportbmsadminproapiconfigtest\mock_variable_.dwl')]" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="22ebb9d2-2406-4797-ba2c-fdc7ae2dc683" >
+				<munit:payload value="#[readUrl('classpath://getreportbmsadminproapiconfigtest\set-event_payload.dwl')]" encoding="UTF-8" />
+				<munit:attributes value="#[readUrl('classpath://getreportbmsadminproapiconfigtest\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://getreportbmsadminproapiconfigtest\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to get:\report:bms-admin-pro-api-config" doc:id="af597586-ed89-40ff-a59b-036d2facdde9" name="get:\report:bms-admin-pro-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="6a608877-2ba5-4669-87a4-9d027dca8303" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import getreportbmsadminproapiconfigtest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="get:\organizer:bms-admin-pro-api-config-test" doc:id="082bfd14-87bf-4c8d-87d2-250b8bb18117" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Flow Reference" doc:id="f11f76eb-ccc7-4b7b-8fd8-b308add87fc3" processor="flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="a5a2f5d3-16af-48c8-961b-843fdc0d0ffd" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://getorganizerbmsadminproapiconfigtest\mock_payload.dwl')]" mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:attributes value="#[readUrl('classpath://getorganizerbmsadminproapiconfigtest\mock_attributes.dwl')]" />
+					<munit-tools:variables >
+						<munit-tools:variable key="outboundHeaders" value="#[readUrl('classpath://getorganizerbmsadminproapiconfigtest\mock_variable_.dwl')]" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="a7dcd367-e794-4673-ab96-c9540c27e4bd" >
+				<munit:payload value="#[readUrl('classpath://getorganizerbmsadminproapiconfigtest\set-event_payload.dwl')]" encoding="UTF-8" />
+				<munit:attributes value="#[readUrl('classpath://getorganizerbmsadminproapiconfigtest\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://getorganizerbmsadminproapiconfigtest\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to get:\organizer:bms-admin-pro-api-config" doc:id="5f2a745c-413b-48a8-82d3-72fb357fd862" name="get:\organizer:bms-admin-pro-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="367dc6c7-a782-47c9-8da9-e2a7c4d9b1df" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import getorganizerbmsadminproapiconfigtest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+
+
+</mule>

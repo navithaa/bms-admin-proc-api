@@ -1,0 +1,13 @@
+%dw 2.0
+
+type auto_1298f2b5_b6ef_4db5_b05a_bff45bb1cbdc_Output_Payload = {
+  address: String, 
+  gender: String, 
+  name: String, 
+  userId: Number, 
+  email: String, 
+  phoneno: String, 
+  Password: String, 
+  _?: Any
+}
+

@@ -1,0 +1,33 @@
+%dw 2.0
+
+type auto_1bd8457a_1337_47fc_bb4c_e88cc1087c75_Input_Attributes = {|
+  clientCertificate?: {|
+    publicKey?: {|  |}, 
+    "type"?: String, 
+    encoded?: Binary
+  |}, 
+  headers: {|
+    client_id: String, 
+    client_secret: String
+  |}, 
+  listenerPath: String, 
+  method: String, 
+  queryParams: {|
+    adminId: Number, 
+    pageSize?: Number, 
+    page?: Number, 
+    name?: String, 
+    status?: "active" | "nonActive", 
+    genre?: Array<String>
+  |}, 
+  queryString: String, 
+  relativePath: String, 
+  remoteAddress: String, 
+  requestPath: String, 
+  requestUri: String, 
+  scheme: String, 
+  uriParams: {|  |}, 
+  version: String, 
+  localAddress: String
+|}
+

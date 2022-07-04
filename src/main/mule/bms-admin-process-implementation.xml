@@ -1,0 +1,512 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:google-sheets="http://www.mulesoft.org/schema/mule/google-sheets" xmlns:excel="http://www.mulesoft.org/schema/mule/excel"
+	xmlns:sharepoint="http://www.mulesoft.org/schema/mule/sharepoint"
+	xmlns:s3="http://www.mulesoft.org/schema/mule/s3" xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/s3 http://www.mulesoft.org/schema/mule/s3/current/mule-s3.xsd
+http://www.mulesoft.org/schema/mule/sharepoint http://www.mulesoft.org/schema/mule/sharepoint/current/mule-sharepoint.xsd
+http://www.mulesoft.org/schema/mule/excel http://www.mulesoft.org/schema/mule/excel/current/mule-excel.xsd
+http://www.mulesoft.org/schema/mule/google-sheets http://www.mulesoft.org/schema/mule/google-sheets/current/mule-google-sheets.xsd">
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="80b0d777-f6a3-4b77-9cb1-ac2f99de9aaf" basePath="/api" >
+		<http:request-connection host="bms-db-sys-api.us-e2.cloudhub.io" port="80" />
+	</http:request-config>
+	<http:request-config name="HTTP_Request_configuration_SMS" doc:name="HTTP Request configuration" doc:id="49c5dae6-f5ef-4b7b-9cc7-ab78113637a1" basePath="/api" >
+		<http:request-connection host="bms-sms-sys-api.us-e2.cloudhub.io" port="80" />
+	</http:request-config>
+	<file:config name="File_Config" doc:name="File Config" doc:id="38b88adb-c763-48da-a56b-fe4cadbd6fc5" />
+	<sub-flow name="getAllUsersDetailsFlow" doc:id="b574584e-95cb-455a-92f2-147b3cb7013a" >
+		<logger level="INFO" doc:name="INFO: Fetching all Users Details" doc:id="62a5dbc4-a781-4a82-a1ee-769ed72fc0a2" message="Fetching all Users Details"/>
+		<http:request method="GET" doc:name="Request To Fetch all Users Details" doc:id="c8993dfb-1467-478f-a7b7-09d3d6958c3b" config-ref="HTTP_Request_configuration" path="/admin/users" >
+			<http:headers ><![CDATA[#[output application/java
+---
+{
+	"client_id" : p('secure::client_id'),
+	"client_secret": p('secure::client_secret')
+}]]]></http:headers>
+			<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"Key" : "Value"
+}]]]></http:uri-params>
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"adminId" : attributes.queryParams.adminId
+}]]]></http:query-params>
+		</http:request>
+		<logger level="INFO" doc:name="INFO: Fetched all Users Details" doc:id="69e05921-51ea-4aa2-be09-e4dee80497d3" message="Fetched all Users Details" />
+		<ee:transform doc:name="Java to Json" doc:id="a331ef00-8e61-4fcd-a4b1-f7c7b2bc4de8" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+	<sub-flow name="updateOrganizerDetailsFlow" doc:id="da48bba7-3e09-47c3-a55c-49d0d3f214e1" >
+		<logger level="INFO" doc:name="INFO: Updating Organizer Details" doc:id="67f1f01a-d5d7-4376-beef-2d82a4555748" message="Updating Organizer Details" />
+		<ee:transform doc:name="Update Organizer Request Body" doc:id="bf6ece1f-ba23-4405-b296-2d01eff21abe">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "Org_Name": payload.orgName,
+  "Password": payload.Password,
+  "Email": payload.email ,
+  "Phone_No": payload.phoneNo,
+  "Address": payload.address
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<http:request method="PUT" doc:name="Request to Update Organizer" doc:id="da6098ff-7c1d-4b92-a252-6b4a28680861" config-ref="HTTP_Request_configuration" path="/organizer-by-id">
+			<http:headers><![CDATA[#[output application/java
+---
+{
+	"client_id" : p('secure::client_id'),
+	"client_secret": p('secure::client_secret')
+}]]]></http:headers>
+			<http:query-params><![CDATA[#[output application/java
+---
+{
+	"orgId": attributes.uriParams.'organizer-id'
+}]]]></http:query-params>
+		</http:request>
+		<logger level="INFO" doc:name="INFO: Updated Organizer Details" doc:id="2c23ca88-7433-4fca-9ac0-800f7057d262" message="Updated Organizer Details" />
+		<ee:transform doc:name="Update Successful Response" doc:id="73d9cee3-1875-408e-81c5-66141c26903b" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	message: "Organizer Details Successfully updated"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+	<sub-flow name="updateShowDetailsFlow" doc:id="faf0d76d-5cd1-4add-9a4c-3570d3829ef4" >
+		<logger level="INFO" doc:name="INFO: Updating Show Details" doc:id="ab54a6e4-f239-4000-96be-c6c3003ecddd" message="Updating Show Details"/>
+		<ee:transform doc:name="Update Show Request Body" doc:id="8327ad5a-af28-41ab-98b5-e67160269996" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"Show_Name": payload.showName,
+    "Show_Date": payload.showDate,
+    "Show_Start_Time": payload.showStartTime,
+    "Show_End_Time": payload.showEndTime,
+    "Price": payload.price, 
+    "Seats": payload.seats ,
+    "Genre": payload.genre, 
+    "Active_Date": payload.activeDate,
+    "Address_Line_1": payload.addressLine1,
+    "Address_Line_2": payload.addressLine2,
+    "City": payload.city,
+    "State": payload.state,
+    "Country": payload.country, 
+    "Pincode": payload.pincode,
+    "Org_Id": payload.orgId
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<http:request method="PUT" doc:name="Request to Update Show Details" doc:id="5dd1c7aa-4432-4553-b07f-23a37cbec8f6" config-ref="HTTP_Request_configuration" path="/show/{show-id}" >
+			<http:headers ><![CDATA[#[output application/java
+---
+{
+	"client_id" : p('secure::client_id'),
+	"client_secret": p('secure::client_secret')
+}]]]></http:headers>
+			<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"show-id" : attributes.uriParams.'show-id'
+}]]]></http:uri-params>
+		</http:request>
+		<logger level="INFO" doc:name="INFO: Updated Show Details" doc:id="c198c69c-e51f-4504-93e9-676b1e3d03d3" message="Updated Show Details"/>
+		<ee:transform doc:name="Update Successful Response" doc:id="8ac79d26-52f7-4d29-abd5-98c421e33760" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	message: "Show Details Successfully updated"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+	<sub-flow name="updateUserDetailsFlow" doc:id="d1f3536b-6a59-4243-8efb-8275ff0255c4" >
+		<logger level="INFO" doc:name="INFO: Updating Specific User Details" doc:id="e271b221-9c41-44d1-aebd-c9fd6331147a" message="Updating Specific User Details"/>
+		<ee:transform doc:name="Update User Request Body" doc:id="4d73972c-a1c7-4a30-8006-81877020afe8" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "Name": payload.name,
+  "Password": payload.Password,
+  "Email": payload.email ,
+  "Phoneno": payload.phoneno,
+  "Address": payload.address,
+  "Gender": payload.gender
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<http:request method="PUT" doc:name="Request to Update Specific User Details" doc:id="8f8940c9-c0c4-4292-b34e-c9017aef18be" config-ref="HTTP_Request_configuration" path="/user" >
+			<http:headers ><![CDATA[#[output application/java
+---
+{
+	"client_id" : p('secure::client_id'),
+	"client_secret": p('secure::client_secret')
+}]]]></http:headers>
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"userId" : attributes.uriParams.'user-id'
+}]]]></http:query-params>
+		</http:request>
+		<logger level="INFO" doc:name="INFO: Updated Specific User Details" doc:id="dbb39cb2-decb-4e64-aa30-6aa885f00c8b" message="Updated Specific User Details" />
+		<ee:transform doc:name="Update Successful Response" doc:id="966a1ffe-6342-4ddf-8e4d-82ad78354cc7" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"message": 'User Details Updated Successfully'
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+	<sub-flow name="deleteOrganizerbyIdFlow" doc:id="c05da677-5ee9-4fe4-ab4b-8657704adf75" >
+		<logger level="INFO" doc:name="INFO: Deleting Specific Organizer" doc:id="16b3dab2-304d-45c2-8036-338f86edfe57" message="Deleting Specific Organizer" />
+		<http:request method="DELETE" doc:name="Request to Delete Specific Organizer" doc:id="2a3c98a7-2d34-4ff4-886a-95b1b4245e56" config-ref="HTTP_Request_configuration" path="/organizer-by-id" >
+			<http:headers ><![CDATA[#[output application/java
+---
+{
+	"client_id" : p('secure::client_id'),
+	"client_secret": p('secure::client_secret')
+}]]]></http:headers>
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"orgId" : attributes.uriParams."organizer-id"
+}]]]></http:query-params>
+		</http:request>
+		<logger level="INFO" doc:name="INFO: Deleted Specific Organizer" doc:id="0bcd88a7-875f-4d08-8e62-2cd49f5e48f7" message="Deleted Specific Organizer" />
+		<ee:transform doc:name="Deleted Successful Response" doc:id="98026558-4472-437f-b6cc-fab66d96aee2" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"message": 'Organizer Deleted Successfully'
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+	<sub-flow name="deleteShowbyIdFlow" doc:id="9e262dd4-0512-4fe1-9742-0ee86803c723" >
+		<logger level="INFO" doc:name="INFO: Deleting Specific Show Details" doc:id="0cf11bab-4091-46bb-a28b-8d84e4e32462" message="Deleting Specific Show Details"/>
+		<http:request method="DELETE" doc:name="Request to Delete Specific Show" doc:id="6306d18d-1fea-4a6c-a3e3-06ce069c5aa0" config-ref="HTTP_Request_configuration" path="/show/{show-id}" >
+			<http:headers ><![CDATA[#[output application/java
+---
+{
+	"client_id" : p('secure::client_id'),
+	"client_secret": p('secure::client_secret')
+}]]]></http:headers>
+			<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"show-id" : attributes.uriParams.'show-id'
+}]]]></http:uri-params>
+		</http:request>
+		<logger level="INFO" doc:name="INFO: Deleted Specific Show" doc:id="5533ebeb-7865-4af7-a376-280a879c6508" message="Deleted Specific Show" />
+		<ee:transform doc:name="Deleted Successful Response" doc:id="28f902dd-fb2d-410a-ad4f-eeca4587df7d" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"message": 'Show Deleted Successfully'
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+	<sub-flow name="deleteUserbyIdFlow" doc:id="10de4ea2-8655-4a74-a68b-77c1af05e9e8" >
+		<logger level="INFO" doc:name="INFO: Deleting Specific User" doc:id="67b2fe3b-3c82-404b-8afe-d98245943e32" message="Deleting Specific User" />
+		<http:request method="DELETE" doc:name="Request to Delete Specific User" doc:id="cc767422-1097-4fea-9788-c6a66c326f0a" config-ref="HTTP_Request_configuration" path="/user" >
+			<http:headers ><![CDATA[#[output application/java
+---
+{
+	"client_id" : p('secure::client_id'),
+	"client_secret": p('secure::client_secret')
+}]]]></http:headers>
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"userId" : attributes.uriParams."user-id"
+}]]]></http:query-params>
+		</http:request>
+		<logger level="INFO" doc:name="INFO: Deleted Specific User" doc:id="61404596-c4ff-4500-b8eb-f24871480a9f" message="Deleted Specific User" />
+		<ee:transform doc:name="Deleted Successful Response" doc:id="537bb7c4-d074-4e9a-bad4-86a13151a0d5" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"message": 'User Deleted Successfully'
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+	<sub-flow name="getAllOrganizerDetailsFlow" doc:id="8cfa5096-0fdd-4a84-993b-ed03ee73dc08" >
+		<logger level="INFO" doc:name="INFO: Fetching all Organizers Details" doc:id="4caa4bbd-47b5-4464-b8d3-396236557bef" message="Fetching all Organizers Details" />
+		<http:request method="GET" doc:name="Request To Fetch all Organizers Details" doc:id="2debe1ee-bd0f-4b39-81a7-64828a3a2bf3" config-ref="HTTP_Request_configuration" path="/admin/organizers" >
+			<http:headers ><![CDATA[#[output application/java
+---
+{
+	"client_id" : p('secure::client_id'),
+	"client_secret": p('secure::client_secret')
+}]]]></http:headers>
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"adminId" : attributes.queryParams.adminId
+}]]]></http:query-params>
+		</http:request>
+		<logger level="INFO" doc:name="INFO: Fetched all Organizers Details" doc:id="dd2bdd74-3045-4bad-be8d-17ab5fc749c5" message="Fetched all Organizers Details" />
+		<ee:transform doc:name="Java to Json" doc:id="87583a08-f8a7-4f27-a61c-68f255ca2531" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+	<sub-flow name="getReportFlow" doc:id="4b10ac09-aa7f-4839-9a6b-2840a2e859f7" >
+		<logger level="INFO" doc:name="INFO: Fetching Report" doc:id="fc303598-e35e-47ff-97b1-6558c404497d" message="Fetching Report"/>
+		<http:request method="GET" doc:name="Request to Fetch Report" doc:id="3bf6e19b-e9d9-490a-8484-99d00538c29b" config-ref="HTTP_Request_configuration" path="/admin/report">
+			<http:headers ><![CDATA[#[output application/java
+---
+{
+	"client_id" : p('secure::client_id'),
+	"client_secret": p('secure::client_secret')
+}]]]></http:headers>
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"fromDate" : attributes.queryParams.'min_date',
+	"toDate" : attributes.queryParams.'max_date',
+	"adminId" : attributes.queryParams.'AdminId'
+}]]]></http:query-params>
+		</http:request>
+		<ee:transform doc:name="Convert Report to csv format" doc:id="4aa481dc-27d2-46ee-8dff-c74fed5497a8" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/csv
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<file:write doc:name="Download csv Report" doc:id="95a1e118-f5d5-4e3f-9382-87995fdc3571" config-ref="File_Config" path="C:/Users/shwetht/Desktop/report.csv"/>
+		<logger level="INFO" doc:name="INFO: Fetched Report " doc:id="33e2cdb9-2062-4c46-a56c-5298b3a734ab" message="Fetched Report "/>
+	</sub-flow>
+	<sub-flow name="getAllShowsDetailsFlow" doc:id="35d2a0c7-7f54-415d-ae36-0cbbd97e9ade" >
+		<logger level="INFO" doc:name="INFO: Fetching all Shows Details " doc:id="57d8e70f-fc51-4d3f-86db-036a5152fe03" message="Fetching all Shows Details " />
+		<http:request method="GET" doc:name="Request To Fetch all Shows Details " doc:id="36f2cfc4-87f9-4c38-93eb-bcb10533d398" config-ref="HTTP_Request_configuration" path="/user/shows" >
+			<http:headers ><![CDATA[#[output application/java
+---
+{
+	"client_id" : p('secure::client_id'),
+	"client_secret": p('secure::client_secret')
+}]]]></http:headers>
+		</http:request>
+		<logger level="INFO" doc:name="INFO: Fetched all Shows Details " doc:id="e0903458-bfb9-4124-a05f-f69b3ee21158" message="Fetched all Shows Details " />
+		<ee:transform doc:name="Java to Json" doc:id="9b3ad92a-f66f-459f-b371-2a200d88fad6" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+	<sub-flow name="getOrganizerByIdFlow" doc:id="79a3113b-1b60-4b56-9459-50c086bf52f5" >
+		<logger level="INFO" doc:name="INFO: Fetching Organizer Details by Id" doc:id="5f0e5cc2-636c-4eca-b7d8-12d2e84ea770" message="Fetching Organizer Details by Id" />
+		<http:request method="GET" doc:name="Request To Fetch Organizer Details" doc:id="89e371f0-c945-43aa-a41c-a0974e6a95cb" config-ref="HTTP_Request_configuration" path="/organizer-by-id" >
+			<http:headers ><![CDATA[#[output application/java
+---
+{
+	"client_id" : p('secure::client_id'),
+	"client_secret": p('secure::client_secret')
+}]]]></http:headers>
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"orgId" : attributes.uriParams.'organizer-id'
+}]]]></http:query-params>
+		</http:request>
+		<logger level="INFO" doc:name="INFO: Fetched Organizer Details By Id" doc:id="99e3b8ef-9e93-4e98-982d-ba74524465f7" message="Fetched Organizer Details By Id" />
+		<ee:transform doc:name="Java to Json" doc:id="8905d677-3279-4438-ae30-0eab1db3de2c" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "orgId": payload.ORG_ID,
+  "orgName": payload.ORG_NAME,
+  "email": payload.EMAIL,
+  "phoneNo": payload.PHONE_NO,
+  "address": payload.ADDRESS
+}
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+	<sub-flow name="getShowDetailsbyId" doc:id="6251f9a6-410f-4fa9-9d55-2335207612e7" >
+		<logger level="INFO" doc:name="INFO: Fetching Show Details by Id" doc:id="12185f37-4288-46ec-ae4f-46f98cadf37c" message="Fetching Show Details by Id" />
+		<http:request method="GET" doc:name="Request To Fetch Show Details" doc:id="6fd68334-78ab-48dc-b89f-ad6e3da8c533" config-ref="HTTP_Request_configuration" path="/show/{show-id}" >
+			<http:headers ><![CDATA[#[output application/java
+---
+{
+	"client_id" : p('secure::client_id'),
+	"client_secret": p('secure::client_secret')
+}]]]></http:headers>
+			<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"show-id" : attributes.uriParams.'show-id'
+}]]]></http:uri-params>
+		</http:request>
+		<logger level="INFO" doc:name="INFO: Fetched Show Details by Id" doc:id="78ce5e5b-987d-45ec-831b-80bcc8b425f9" message="Fetched Show Details by Id" />
+		<ee:transform doc:name="Java to Json" doc:id="58a973eb-1916-48b8-b65b-fac04099d494" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+	<sub-flow name="getUserByIdFlow" doc:id="5e2826dd-3511-40fe-b865-8f8999cd5de9" >
+		<logger level="INFO" doc:name="INFO: Fetching User Details by Id" doc:id="41adc06b-46d0-459f-9ce6-b32ec20f4696" message="Fetching User Details by Id" />
+		<http:request method="GET" doc:name="Request To Fetch User Details " doc:id="042f8931-66e0-45e8-8ed5-b926af22f128" config-ref="HTTP_Request_configuration" path="/user" >
+			<http:headers ><![CDATA[#[output application/java
+---
+{
+	"client_id" : p('secure::client_id'),
+	"client_secret": p('secure::client_secret')
+}]]]></http:headers>
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"userId" : attributes.uriParams."user-id"
+}]]]></http:query-params>
+		</http:request>
+		<logger level="INFO" doc:name="INFO: Fetched User Details by Id" doc:id="4c7b9f11-f816-4660-b0bd-0c9e420ae2b9" message="Fetched User Details by Id" />
+		<ee:transform doc:name="Java to Json" doc:id="e1543d2c-44c1-42c8-bb95-4a1ae1018d1c" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"User_Id": payload.USER_ID,
+     "Name": payload.NAME,
+     "Email": payload.EMAIL,
+     "Gender": payload.GENDER,
+     "Address": payload.ADDRESS,
+     "Phoneno": payload.PHONE_NO
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+	<sub-flow name="sendAdvertisementtoOrganizerFlow" doc:id="e8338524-bfdb-472c-b6d4-5cd56ba03b00" >
+		<logger level="INFO" doc:name="INFO: Sending Advertisement to Organizers" doc:id="22e562fe-fb27-4ea6-a0f4-ac66ebface26" message="Sending Advertisement to Organizers"/>
+		<http:request method="GET" doc:name="Request to Fetch Organizers Phone Number" doc:id="576af7c2-9804-4af3-bbe8-be6c1cc1f292" config-ref="HTTP_Request_configuration" path="/phone/organizers">
+			<http:headers ><![CDATA[#[output application/java
+---
+{
+	"client_id" : p('secure::client_id'),
+	"client_secret": p('secure::client_secret')
+}]]]></http:headers>
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"adminId" : attributes.queryParams.adminId
+}]]]></http:query-params>
+		</http:request>
+		<ee:transform doc:name="Message Body" doc:id="4ce6b495-70fa-41d9-bb90-5e2d33ed3f44" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+    "from": "+12055128419",
+    "to": ["+916362022880"],
+    "body": "Hello Organizers, New Premium plans are available!!!"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<http:request method="POST" doc:name="Request to Send Advertisement to Organizers" doc:id="6ebdbb89-c5d9-416a-bcee-07217e550c41" config-ref="HTTP_Request_configuration_SMS" path="/send-sms">
+			<http:headers ><![CDATA[#[output application/java
+---
+{
+	"client_id" : p('secure::client_id'),
+	"client_secret": p('secure::client_secret')
+}]]]></http:headers>
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"adminId" : attributes.queryParams.adminId
+}]]]></http:query-params>
+		</http:request>
+		<logger level="INFO" doc:name="INFO: Sent Advertisement to Organizers" doc:id="49d3dc51-6dd9-404f-b9a9-df43d6c65e08" message="Sent Advertisement to Organizers"/>
+	</sub-flow>
+	<sub-flow name="sendAdvertisementtoUserFlow" doc:id="50c725fb-643b-47b9-affc-f2d9f9a38f8f" >
+		<logger level="INFO" doc:name="INFO: Sending Advertisement to Users" doc:id="1ef67400-b626-4067-b80f-251fe13ffb0a" message="Sending Advertisement to Users"/>
+		<http:request method="GET" doc:name="Request to Fetch Users Phone Number" doc:id="ae895607-d0ce-4a91-ae52-0a331513f685" config-ref="HTTP_Request_configuration" path="/phone/users">
+			<http:headers ><![CDATA[#[output application/java
+---
+{
+	"client_id" : p('secure::client_id'),
+	"client_secret": p('secure::client_secret')
+}]]]></http:headers>
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"adminId" : attributes.queryParams.adminId
+}]]]></http:query-params>
+		</http:request>
+		<ee:transform doc:name="Message Body" doc:id="4823d400-0c8c-44fc-a49b-f71ea9eb996d" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+    "from": "+12055128419",
+    "to": ["+916362022880"],
+    "body": "Hello Users, New Movies are available with more offers!!!"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<http:request method="POST" doc:name="Request to Send Advertisement to Users" doc:id="38090db2-a412-4827-8854-5545b4413834" path="/send-sms" config-ref="HTTP_Request_configuration_SMS">
+			<http:headers ><![CDATA[#[output application/java
+---
+{
+	"client_id" : p('secure::client_id'),
+	"client_secret": p('secure::client_secret')
+}]]]></http:headers>
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"adminId" : attributes.queryParams.adminId
+}]]]></http:query-params>
+		</http:request>
+		<logger level="INFO" doc:name="INFO: Sent Advertisement to Users" doc:id="371cf92d-8781-4629-bb32-95572eda4f50" message="Sent Advertisement to Users"/>
+	</sub-flow>
+</mule>

@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd ">
+    <apikit:config name="bms-admin-pro-api-config" api="resource::ddbd4ad5-6f2a-4406-8403-dd1be00842b9:bms-admin-pro-api:1.0.6:raml:zip:bms-admin-pro-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <flow name="bms-admin-pro-api-main">
+        <http:listener path="/api/*" config-ref="HTTP_Listener_config">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body><![CDATA[#[payload]]]></http:body>
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:router config-ref="bms-admin-pro-api-config" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:BAD_REQUEST">
+                <ee:transform>
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Bad request"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">400</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform>
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:METHOD_NOT_ALLOWED">
+                <ee:transform>
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Method not allowed"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">405</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_ACCEPTABLE">
+                <ee:transform>
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not acceptable"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">406</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
+                <ee:transform>
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Unsupported media type"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">415</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_IMPLEMENTED">
+                <ee:transform>
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not Implemented"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">501</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="bms-admin-pro-api-console">
+        <http:listener path="/console/*" config-ref="HTTP_Listener_config">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body><![CDATA[#[payload]]]></http:body>
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:console config-ref="bms-admin-pro-api-config" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform>
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="put:\organizer\(organizer-id):application\json:bms-admin-pro-api-config">
+		<flow-ref doc:name="Flow Reference" doc:id="2fc8ea78-5a2c-41c4-ae8c-ca62c8860b6c" name="updateOrganizerDetailsFlow"/>
+    </flow>
+    <flow name="put:\show\(show-id):application\json:bms-admin-pro-api-config">
+		<flow-ref doc:name="Flow Reference" doc:id="eae82749-5ea8-49a4-89b7-9364a9c0f97e" name="updateShowDetailsFlow"/>
+    </flow>
+    <flow name="put:\user\(user-id):application\json:bms-admin-pro-api-config">
+		<flow-ref doc:name="Flow Reference" doc:id="65b788a1-fcfb-4605-923a-7f3ee9f472cd" name="updateUserDetailsFlow"/>
+    </flow>
+    <flow name="delete:\organizer\(organizer-id):bms-admin-pro-api-config">
+		<flow-ref doc:name="Flow Reference" doc:id="39528631-7137-4c40-883c-995387fe7e2d" name="deleteOrganizerbyIdFlow"/>
+    </flow>
+    <flow name="delete:\show\(show-id):bms-admin-pro-api-config">
+		<flow-ref doc:name="Flow Reference" doc:id="3179af85-9912-4e41-b575-015b65b1cb5d" name="deleteShowbyIdFlow"/>
+    </flow>
+    <flow name="delete:\user\(user-id):bms-admin-pro-api-config">
+		<flow-ref doc:name="Flow Reference" doc:id="7c872865-19a7-4b55-8c1d-fe2239e9836b" name="deleteUserbyIdFlow"/>
+    </flow>
+    <flow name="get:\organizer:bms-admin-pro-api-config">
+		<flow-ref doc:name="Flow Reference" doc:id="a5a2f5d3-16af-48c8-961b-843fdc0d0ffd" name="getAllOrganizerDetailsFlow"/>
+    </flow>
+    <flow name="get:\report:bms-admin-pro-api-config">
+		<flow-ref doc:name="Flow Reference" doc:id="88b2315c-1983-4344-95c8-21377b8cc690" name="getReportFlow"/>
+    </flow>
+    <flow name="get:\show:bms-admin-pro-api-config">
+		<flow-ref doc:name="Flow Reference" doc:id="4ec73f1d-cf31-49bd-833a-82fdf3eff4ed" name="getAllShowsDetailsFlow"/>
+    </flow>
+    <flow name="get:\user:bms-admin-pro-api-config">
+		<flow-ref doc:name="Flow Reference" doc:id="0c3031cf-69c2-4d59-acd3-b7725750d02b" name="getAllUsersDetailsFlow"/>
+    </flow>
+    <flow name="get:\organizer\(organizer-id):bms-admin-pro-api-config">
+		<flow-ref doc:name="Flow Reference" doc:id="99bf8f22-6cd1-46ec-b04c-7587610c7bb5" name="getOrganizerByIdFlow"/>
+    </flow>
+    <flow name="get:\show\(show-id):bms-admin-pro-api-config">
+		<flow-ref doc:name="Flow Reference" doc:id="93a0fd7c-a532-45bf-a31b-7578b972c13e" name="getShowDetailsbyId"/>
+    </flow>
+    <flow name="get:\user\(user-id):bms-admin-pro-api-config">
+		<flow-ref doc:name="Flow Reference" doc:id="b337ca4a-4447-4faa-862f-1dc64b3c4882" name="getUserByIdFlow"/>
+    </flow>
+    <flow name="post:\advertise\send-organizers-phone:application\json:bms-admin-pro-api-config">
+		<flow-ref doc:name="Flow Reference" doc:id="f528b617-25ce-4181-9dff-4e8220bf91ce" name="sendAdvertisementtoOrganizerFlow"/>
+    </flow>
+    <flow name="post:\advertise\send-users-phone:application\json:bms-admin-pro-api-config">
+		<flow-ref doc:name="Flow Reference" doc:id="0df52f2b-f6fc-45b6-ae4f-fcbff0d4f632" name="sendAdvertisementtoUserFlow"/>
+    </flow>
+</mule>

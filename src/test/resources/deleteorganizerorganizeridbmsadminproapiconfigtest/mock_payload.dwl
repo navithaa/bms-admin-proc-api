@@ -1,0 +1,3 @@
+{
+  "message": "Organizer Deleted Successfully"
+}

@@ -1,0 +1,3 @@
+{
+  "message": "booking deleted successfully"
+}

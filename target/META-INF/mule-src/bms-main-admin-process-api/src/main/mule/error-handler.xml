@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+	<error-handler name="error-handlerError_Handler" doc:id="78b60f9c-8dda-4c86-963a-4c15f04a46a6" >
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="6599edb7-f22f-462e-b56f-d2308ce60fd9" type="APIKIT:NOT_FOUND">
+			<set-variable value="404" doc:name="httpStatus 404" doc:id="88b0489d-66ff-4083-ba94-52c99fb43da2" variableName="httpStatus"/>
+			<set-payload value="#[error.description]" doc:name="Show Id Does Not Exist" doc:id="fab33f59-7437-4604-9189-208194f61ccf" />
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="213ba266-4b1f-47e0-88d6-4e53f4174bb7" type="APIKIT:METHOD_NOT_ALLOWED">
+			<set-variable value="#[401]" doc:name="httpStatus 401" doc:id="81b525a8-f19b-4a25-bee5-bc7a97994a80" variableName="httpStatus"/>
+			<set-payload value="#[error.description]" doc:name="Set Payload" doc:id="11356e9b-a327-4d6e-82ca-c2d946d9017e" />
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="0fcf6d82-c3a6-44fc-8476-15d744410a70" type="APIKIT:BAD_REQUEST">
+			<set-variable value="400" doc:name="httpStatus 400" doc:id="78650b5f-848b-4830-8a8a-a641699cfd51" variableName="httpStatus"/>
+			<set-payload value='#[{message:"bad request error"}]' doc:name="error message" doc:id="06a7ce9c-205f-473c-9227-3901c58198c5" />
+		
+</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="594e21d9-5472-4142-b547-3c1f390b4669" type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
+			<set-variable value="400" doc:name="httpStatus 400" doc:id="7a67fe9a-34a9-4e33-ace8-7932e2736c96" variableName="httpStatus" />
+			<set-payload value='#[{message:"unknown error"}]' doc:name="error message" doc:id="4eed0b0c-49e4-4843-94b9-f43ce11567e3" />
+		</on-error-propagate>
+		
+	</error-handler>
+</mule>
